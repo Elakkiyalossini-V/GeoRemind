@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'onboarding_screen.dart';
+import 'home_screen.dart';
+import '../services/database_service.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -53,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      _goToOnboarding();
+      await _goToNextScreen();
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 
@@ -107,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      _goToOnboarding();
+      await _goToNextScreen();
     } on GoogleSignInException catch (e) {
       if (!mounted) return;
 
@@ -189,7 +191,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _goToOnboarding() {
+  Future<void> _goToNextScreen() async {
+  final completed =
+      await DatabaseService.isOnboardingCompleted();
+
+  if (!mounted) return;
+
+  if (completed) {
+    final userName =
+        await DatabaseService.getUserName();
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(
+          userName: userName ?? 'User',
+        ),
+      ),
+    );
+  } else {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -197,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
 
   @override
   Widget build(BuildContext context) {

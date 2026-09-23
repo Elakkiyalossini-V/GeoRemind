@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import '../services/database_service.dart';
 import 'home_screen.dart';
+import 'location_picker_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,6 +18,7 @@ class _OnboardingScreenState
   int _currentStep = 0;
 
   String _name = '';
+  LatLng? _homeLocation;
 
   final TextEditingController _nameController =
       TextEditingController();
@@ -373,101 +376,112 @@ class _OnboardingScreenState
     );
   }
 
-  // STEP 2
-  Widget _buildHomeStep() {
-    return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 35),
+Future<void> _openHomeLocationPicker() async {
+  final result = await Navigator.push<LatLng>(
+    context,
+    MaterialPageRoute(
+      builder: (context) => LocationPickerScreen(
+        initialLocation: _homeLocation,
+      ),
+    ),
+  );
 
-        _buildIcon(
-          Icons.home_outlined,
+  if (result == null) return;
+
+  setState(() {
+    _homeLocation = result;
+
+    _homeLocationController.text =
+        '${result.latitude.toStringAsFixed(6)}, '
+        '${result.longitude.toStringAsFixed(6)}';
+  });
+}
+ // STEP 2
+Widget _buildHomeStep() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(height: 35),
+
+      _buildIcon(
+        Icons.home_outlined,
+      ),
+
+      const SizedBox(height: 25),
+
+      const Text(
+        'Where do you live?',
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
         ),
+      ),
 
-        const SizedBox(height: 25),
+      const SizedBox(height: 10),
 
-        const Text(
-          'Where do you live?',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
+      Text(
+        'Add your home location so GeoRemind can understand your usual location.',
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.grey.shade600,
+          height: 1.4,
+        ),
+      ),
+
+      const SizedBox(height: 30),
+
+      TextField(
+        controller: _homeLocationController,
+        readOnly: true,
+        onTap: _openHomeLocationPicker,
+        decoration: InputDecoration(
+          labelText: 'Home location',
+          hintText: 'Tap the map icon to select your home',
+
+          prefixIcon: const Icon(
+            Icons.location_on_outlined,
           ),
-        ),
 
-        const SizedBox(height: 10),
-
-        Text(
-          'Add your home location so GeoRemind can understand your usual location.',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey.shade600,
-            height: 1.4,
-          ),
-        ),
-
-        const SizedBox(height: 30),
-
-        TextField(
-          controller:
-              _homeLocationController,
-          decoration: InputDecoration(
-            labelText: 'Home location',
-            hintText:
-                'Enter your home location',
-            prefixIcon: const Icon(
-              Icons.location_on_outlined,
+          suffixIcon: IconButton(
+            onPressed: _openHomeLocationPicker,
+            icon: const Icon(
+              Icons.map_outlined,
             ),
-            suffixIcon: IconButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'OpenStreetMap location picker will be added later.',
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.map_outlined,
-              ),
-            ),
-            border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(16),
-            ),
+          ),
+
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
+      ),
 
-        const SizedBox(height: 12),
+      const SizedBox(height: 12),
 
-        Text(
-          'Optional for now. If you skip this, GeoRemind will ask for your home location when you create your first reminder.',
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.grey.shade600,
-            height: 1.4,
-          ),
+      Text(
+        'Select your home location on the OpenStreetMap. You can move the map and place the pin exactly where you live.',
+        style: TextStyle(
+          fontSize: 13,
+          color: Colors.grey.shade600,
+          height: 1.4,
         ),
+      ),
 
-        const SizedBox(height: 35),
+      const SizedBox(height: 35),
 
-        _continueButton(
-          text: 'Continue',
-          onPressed: _continue,
-        ),
+      _continueButton(
+        text: 'Continue',
+        onPressed: _continue,
+      ),
 
-        const SizedBox(height: 8),
+      const SizedBox(height: 8),
 
-        _skipButton(
-          text: 'Skip for now',
-          onPressed: _skip,
-        ),
-      ],
-    );
-  }
-
+      _skipButton(
+        text: 'Skip for now',
+        onPressed: _skip,
+      ),
+    ],
+  );
+}
   // STEP 3
   Widget _buildPlacesStep() {
     return Column(
