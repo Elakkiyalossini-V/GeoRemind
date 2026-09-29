@@ -1,0 +1,25 @@
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/ios/Flutter/.last_build_id
+**/doc/api/
+.DS_Store
+*.iml
+.idea/
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Android generated files
+android/.kotlin/
+android/hs_err_pid*.log
+
+# Flutter generated files
+ios/Flutter/ephemeral/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh

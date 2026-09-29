@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "541937288961",
+    "project_id": "georemind-6e5b2",
+    "storage_bucket": "georemind-6e5b2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541937288961:android:17825f07dc62f058c3fd00",
+        "android_client_info": {
+          "package_name": "com.example.geo_remind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "541937288961-47ppjkre9rubl102952ovbtihse796n0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geo_remind",
+            "certificate_hash": "9eb0811bca8fc0949d9ab172540e81268bba9f58"
+          }
+        },
+        {
+          "client_id": "541937288961-3pheq4t9qbai9ere4lnh6otu74a5386i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrE3-2XyJ3Njeoqcq2MMJhLIF89BFKaBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "541937288961-3pheq4t9qbai9ere4lnh6otu74a5386i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
